@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 
 const initialState = {
-    objectId: "104028",
+    objectId: 104025,
     apiData: {}
 }
 
@@ -12,43 +12,41 @@ const initialState = {
     initialState,
     reducers: {
 
-       setAPIData: (state) => {
-            return{ ...state, objectId: state.objectId + action.payload}
+       setAPIData: (action) => {
+            return{apiData: action.payload}
         },
 
-        incrementId: (state, action) => {
+        incrementId: (state) => {
             return { ...state, objectId: state.objectId + 1  }
         },
 
-        decrementId: (state, action) => {
+        decrementId: (state) => {
             return { ...state, objectId: state.objectId - 1 }
         },
 
-       enterId: (state, action) => {
-            return { ...state, objectId: state.objectId + action.payload }
+       clearId: (state) => {
+            return initialState
         },
 
-        resetId: (state) => {
-            return { ...state, objectId: state.objectId + action.payload }
+        resetId: (state,action) => {
+            return { ...state, objectId: action.payload }
         }
     }
     
 })
 
 
-export const { setAPIData, incrementId, decrementId, enterId, resetId} = dataSlice.actions
+export const { setAPIData, incrementId, decrementId, clearId, resetId} = dataSlice.actions
 
-export const fetchDataThunk = () => {
+export const fetchData = () => {
     const fetchDataThunk = async (dispatch, getState) => {
         let state = getState()
         console.log(state)
         const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${state.data.objectId}`)
         const rData = await response.json()
-        console.log(rData)
-        dispatch(setData(rData))
+        dispatch(setAPIData(rData))
     }
     return fetchDataThunk
 }
 
 export default dataSlice.reducer
-
