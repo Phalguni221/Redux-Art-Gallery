@@ -1,35 +1,33 @@
 import './App.css';
 import {useSelector, useDispatch, connect } from 'react-redux'
-import { setAPIData, incrementId, decrementId, clearId, resetId, fetchData } from './features/dataSlice'
+import {  incrementId, decrementId, clearData, resetId, fetchData } from './features/dataSlice'
 import {useEffect} from 'react';
 
 function App (props) {
-  const Dispatch = useDispatch()
+  const dispatch = useDispatch()
   const data = useSelector((state) => state.data)
   const renderImg = () => {
-    if(data.setAPIData) {
-      return <img style={{'width': '100vw'}} src={data.setAPIData.primaryImage} alt={data.setAPIData.title} />
+    if(data.apiData) {
+      return <img style={{'width': '100vw'}} src={data.apiData.primaryImage} alt={data.apiData.title} />
     } else {
       return <p>image here</p>
     }
   }
 
   useEffect(() => {
-    Dispatch(fetchData())
-  }, [props.objectId, Dispatch])
+    dispatch(fetchData())
+  }, [props.objectId, dispatch])
   
   return (
     <div className="App">
     <div>
-      <button onClick={() => Dispatch(fetchData())}>Thunk!</button>
-      <button onClick={() => Dispatch(setAPIData())}>setAPI</button>
-      <button onClick={() => Dispatch(incrementId())}>Increment</button>
-      <button onClick={() => Dispatch(decrementId())}>Decrement</button>
-      <button onClick={() => Dispatch(clearId())}>Clear</button>
-      <button onClick={() => Dispatch(resetId())}>Reset</button>
+      <button onClick={() => dispatch(fetchData())}>Thunk!</button> 
+      <button onClick={() => dispatch(incrementId())}>Increment</button>
+      <button onClick={() => dispatch(decrementId())}>Decrement</button>
+      <button onClick={() => dispatch(clearData())}>Clear</button>
     </div>
     <input value={ data.objectId } onChange={(e) => {
-      Dispatch(resetId(Number(e.target.value)))
+      dispatch(resetId(Number(e.target.value)))
     }} />
     <div>
       {data.objectId}
@@ -42,3 +40,49 @@ function App (props) {
   const mapStateToProps = (state, ownProps) => ({ objectId: state.data.objectId })
 
 export default connect(mapStateToProps)(App)
+
+// import './App.css';
+// import { useSelector, useDispatch, connect } from 'react-redux'
+// import { clearData, fetchData, incrementId, decrementId, inputId } from './features/dataSlice'
+// import { useEffect } from 'react';
+
+// function App(props) {
+//   const dispatch = useDispatch()
+//   const data = useSelector((state) => state.data)
+
+//   const renderImg = () => {
+//     if(data.apiData) {
+//       return <img style={{'width': '100vw'}} src={data.apiData.primaryImage} alt={data.apiData.title} />
+//     } else {
+//       return <p>image here</p>
+//     }
+//   }
+
+//   useEffect(() => {
+//     dispatch(fetchData())
+//   }, [props.objectId, dispatch])
+
+
+//   return (
+//     <div className="App">
+//       <div>
+//         <button onClick={() => dispatch(fetchData())}>Thunk!</button>
+//         <button onClick={() => dispatch(clearData())}>Clear</button>
+//         <button onClick={() => dispatch(incrementId())}>Next</button>
+//         <button onClick={() => dispatch(decrementId())}>Back</button>
+//       </div>
+//       <input value={ data.objectId } onChange={(e) => {
+//         dispatch(inputId(Number(e.target.value)))
+//       }} />
+//       <div>
+//         {data.objectId}
+//         {renderImg()}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// const mapStateToProps = (state, ownProps) => ({ objectId: state.data.objectId })
+
+// export default connect(mapStateToProps)(App);
